@@ -32,10 +32,11 @@ mongoose.connect(dbConfig.url).then(() => {
     // console.log('time ', Date.now())
     console.log('formatted ', date)
     console.log('time ', utc)
-    console.log('hour ', hour)
+    console.log('hour ',
+     hour)
     console.log('formatted hour ', moment_hour)
 }).catch(err => {
-    console.log('error connecting')
+    console.log('error connecting ', err)
 })
     /* end config */
     // app.use(bodyParser.json())

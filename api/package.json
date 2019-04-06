@@ -1,29 +1,30 @@
 {
-  "name": "product",
-  "description": "Technical Assessment project",
+  "name": "traffic_app",
   "version": "1.0.0",
-  "author": "Uche Chinedu",
+  "description": "A traffic report application",
   "main": "server.js",
-  "engines": {
-    "node": "6.11.0",
-    "npm": "3.10.10"
-  },
   "dependencies": {
-    "bcrypt-nodejs": "latest",
-    "body-parser": "^1.5.2",
-    "cookie-parser": "~1.4.3",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
-    "express-session": "~1.14.1",
+    "express-session": "^1.14.2",
     "jsonwebtoken": "^8.5.1",
-    "method-override": "~2.1.2",
+    "method-override": "^2.1.3",
     "moment": "^2.24.0",
-    "mongoose": "^4.2.6",
-    "morgan": "^1.9.0",
+    "mongoose": "^4.13.18",
+    "morgan": "^1.9.1",
     "multer": "^1.4.1",
-    "multer-sharp": "^0.5.2",
     "nodemon": "^1.18.10",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Chinedu",
+  "license": "ISC"
 }

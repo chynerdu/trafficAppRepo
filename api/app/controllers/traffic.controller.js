@@ -5,7 +5,8 @@ var moment = require('moment')
 
 // Create and Save a new Note
 exports.create = (req, res) => {
-    const date = moment().format("YYYY-MM-DD HH:mm:ss")
+    const fDate = moment().format("YYYY-MM-DD HH:mm:ss")
+    const date = moment().format("YYYY-MM-DD")
     const moment_hour = moment().hour();
     jwt.verify(req.headers.authorization, 'your_jwt_secret', function(err, legit){
         if (err) {
@@ -14,46 +15,102 @@ exports.create = (req, res) => {
                 message: 'Invalid token'
             })
         } else {
-            //check if user posted traffic report within same hour 
-            user.findById(legit._id, function(err, singleUser){
-                console.log('user info ', singleUser)
-                if (singleUser.last_updated == moment_hour) {
-                    return res.status(200).json({
-                        message: 'Already updated updated traffic for this hour',
-                    })
+            //check post already made for that day
+            traffic.find({'traffic.date' : date}, function(err, trafficResult) {
+                if (err) {
+                   console.log('error occured ', err)
                 } else {
-                    // console.log('time ', Date.now())
-                    console.log('formatted ', date)
-                    console.log('formatted hour ', moment_hour)
-                    //update user info first
-                    var myquery = { _id: legit._id };
-                    var newvalues = { $set: {last_updated: moment_hour} };
-                    user.updateOne(myquery, newvalues, function(err, singleUser){
-                        if (err) {
-                            return res.status(402).json({
-                                message: 'error',
-                                error: err
+                   if (trafficResult.length > 0) {
+                        console.log('posted for today', trafficResult[0])
+                        let query = {_id: trafficResult[0]._id}
+                        var payload = {
+                            "hour_posted" : moment_hour,
+                            "time_lapse.starting_point" : req.body.starting_point,
+                            "time_lapse.ending_point" : req.body.ending_point,
+                            "time_lapse.traffic_status" : req.body.traffic_status,
+                            "time_lapse.poster_id" : legit._id,
+                            "time_lapse.posted_at" : fDate,  
+                        }
+                        console.log('payload ', payload)
+                        traffic.update(query, {$push: {"traffic.hourly": payload}}, function(err, updateDate){
+                            if (err) {
+                                console.log('error occured ', err)
+                            } else {
+                                console.log('posted ', updateDate)
+                            res.status(200).json({
+                                    message: 'post exist for today, so updated',
+                                    token_verified: legit,
+                                    // result: updateDate,
+                                    headers: req.headers
+                                }) 
+                            }
+                        })
+                  } else {
+                      //check if user posted traffic report within same hour 
+                      user.findById(legit._id, function(err, singleUser){
+                        console.log('user info ', singleUser)
+                        if (singleUser.last_updated != moment_hour) {
+                            return res.status(200).json({
+                                message: 'Already updated updated traffic for this hour',
                             })
                         } else {
-                        //update traffic info
-                            var newReport  = new traffic;
-                            newReport.user_id = legit._id
-                            newReport.traffic_status = req.body.traffic_status,
-                            newReport.posted_at = date
-                            newReport.save(function(err, results){
-                                console.log('posted '+ results);
-                                console.log(req.files);
-                                res.status(200).json({
-                                    message: 'Post successfull',
-                                    token_verified: legit,
-                                    result: results,
-                                    headers: req.headers
-                                })
+                            // console.log('time ', Date.now())
+                            console.log('formatted ', date)
+                            console.log('formatted hour ', moment_hour)
+                            //update user info first
+                            var myquery = { _id: legit._id };
+                            var newvalues = { $set: {last_updated: moment_hour} };
+                            user.updateOne(myquery, newvalues, function(err, singleUser){
+                                if (err) {
+                                    return res.status(402).json({
+                                        message: 'error',
+                                        error: err
+                                    })
+                                } else {
+                                //update traffic 
+                                    console.log('sent ', req.body.time_lapse)
+                                    var newReport  = new traffic;
+                                    // newReport.user_id = legit._id
+                                    newReport.traffic.date = date,
+                                    // newReport.traffic.hourly.hour_posted = moment_hour,
+                                    // newReport.traffic.hourly[0].time_lapse.starting_point = req.body.starting_point,
+                                    // newReport.traffic.hourly[0].time_lapse.ending_point = req.body.ending_point,
+                                    // newReport.traffic.hourly[0].time_lapse.traffic_status = req.body.traffic_status,
+                                    // newReport.traffic.hourly[0].time_lapse.poster_id = legit._id,
+                                    // newReport.traffic.hourly[0].time_lapse.posted_at = fDate,
+                                    newReport.save(function(err, results){
+                                        console.log('saved new post, updating hour')
+                                        let trafficQuery = {_id: results._id}
+                                        var trafficPayload = {
+                                            "hour_posted" : moment_hour,
+                                            "time_lapse.starting_point" : req.body.starting_point,
+                                            "time_lapse.ending_point" : req.body.ending_point,
+                                            "time_lapse.traffic_status" : req.body.traffic_status,
+                                            "time_lapse.poster_id" : legit._id,
+                                            "time_lapse.posted_at" : fDate,  
+                                        }
+                                        traffic.update(trafficQuery, {$push: {"traffic.hourly": trafficPayload}}, function(err, updateDate){
+                                            if (err) {
+                                                console.log('error occured ', err)
+                                            } else {
+                                                console.log('posted ', updateDate)
+                                            res.status(200).json({
+                                                    message: 'made new post and updated',
+                                                    token_verified: legit,
+                                                    // result: updateDate,
+                                                    headers: req.headers
+                                                }) 
+                                            }
+                                        })
+                                    });
+                                }
                             });
                         }
-                    });
+                      });
+                  }
                 }
-            });
+            }) 
+            
         }
     });
 };
