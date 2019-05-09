@@ -45,6 +45,7 @@
 module.exports = (app, passport) => {
     var express = require('express');
     const jwt = require('jsonwebtoken');
+    const userModel = require('../../models/user');
     // var router = express.Router();
     // var passport = require('passport');
     // var passport = require('../../config/passport/index.js');
@@ -56,12 +57,12 @@ module.exports = (app, passport) => {
     app.post('/signup', function(req, res, next) {
         console.log('email is ', req.body);
         passport.authenticate('local-signup', function(err, user, info) {
-            console.log("authenticate");
+            // console.log("authenticate");
             console.log(err);
-            res.send(JSON.stringify(info)).status(200)
-            console.log(user);
+            res.send('Registration successful, login').status(200)
+            // console.log(user);
             console.log(info);
-            console.log(req.body);
+            // console.log(req.body);
         })(req, res, next);
     });
     
@@ -70,22 +71,31 @@ module.exports = (app, passport) => {
         // console.log('payload ', user)
         if (err) {
          console.log('error ', err)
+         res.status(401).send(
+                'Invalid credentials'
+            ) 
         } 
         if (!user) {
-            res.status(200).json({
-            message: 'invalid credentials'
-            })
+              res.writeHead(401, 'Invalid credentialss', {'content-type' : 'text/plain'});
+              res.end('Invalid credentialss');
         } else {
             const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
             // const legit = jwt.verify(req.headers.authorization, 'your_jwt_secret');
             console.log('token ', token)
-            res.status(200).json({
-             message: 'Login successfull',
-             user: user,
-             token: token,
-             headers: req.headers
-            })
-            console.log(user);
+            var data = {
+              id: user._id,
+              first_name: user.first_name,
+              email: user.email,
+              token: token
+            }
+            // res.writeHead(200, 'login successful', {'content-type' : 'application/json'});
+            res.send(data)
+            // res.end();
+            // res.statusMessage = 'Your have signed-in succesfully'
+            // res.send(user)
+            // res.setHeader('Content-Type', 'application/json');
+            // return res.json(user)
+            // console.log(user);
         }
         
     })(req, res, next);

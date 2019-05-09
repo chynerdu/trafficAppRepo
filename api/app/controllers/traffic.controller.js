@@ -47,8 +47,8 @@ exports.create = (req, res) => {
                                 })
                                 console.log('after query ', trafficFilter)
                                 if (trafficFilter.length > 0) {
-                                    return res.status(200).json({
-                                        message: 'Already updated updated traffic for this hour',
+                                    return res.status(208).json({
+                                        message: 'Already updated traffic for this location within this hour',
                                     })
                                 } else {
                                    updateHourly(query, payload); 

@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors')
 var app =express();
 var  bodyParser =require('body-parser');  
 var mongoose = require('mongoose');
@@ -6,6 +7,7 @@ var  router = express.Router();
 // var multer = require('multer');
 var port =process.env.PORT ||8084;
 // app.use(bodyParser.urlencoded())
+app.use(cors())
 app.use(bodyParser.json())
 app.use( bodyParser.urlencoded({ extended: false }));
 var passport = require('passport');

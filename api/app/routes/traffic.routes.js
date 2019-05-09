@@ -25,7 +25,7 @@ module.exports = (app) => {
     // var upload = multer({  storage: storage,limits:{fileSize:50000000}
     // }) 
     // Create a new Note
-    app.post('/notes', traffic.create);
+    app.post('/post-report', traffic.create);
     // app.post('/notes', function(req, res){
     //     console.log('posted ', req.body)
     // });

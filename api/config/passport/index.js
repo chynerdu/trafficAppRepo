@@ -99,7 +99,7 @@ var myLocalConfig = (passport, LocalStrategy) => {
 
             // check to see if theres already a user with that email
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+               return done(null, false, { message: 'Email is already taken.' });
             } else {
 
                 // if there is no user with that email
@@ -109,6 +109,7 @@ var myLocalConfig = (passport, LocalStrategy) => {
                 // set the user's local credentials
                 newUser.email = email;
                 newUser.first_name = req.body.first_name
+                newUser.last_name = req.body.last_name
                 newUser.password = newUser.generateHash(password);
 
                 // save the user

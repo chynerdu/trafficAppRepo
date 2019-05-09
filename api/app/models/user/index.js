@@ -21,7 +21,11 @@ const userSchema = mongoose.Schema({
     last_updated: {
         type: Number,
         required: false
-    }
+    },
+    last_name: {
+        type: String,
+        required: true
+    },
     // timestamps: true
 })
 

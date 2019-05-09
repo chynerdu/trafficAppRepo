@@ -1,15 +1,60 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Login from '@/components/login'
+import Signup from '@/components/register/signup'
+import TrafficStatus from '@/components/traffic/traffic-status'
+import TrafficReport from '@/components/traffic/traffic-report'
+import SelectStatus from '@/components/traffic/select-status'
 
-Vue.use(Router)
 
-export default new Router({
-  routes: [
+ export const routes = [
     {
-      path: '/',
+      path: '/login',
       name: 'Hello',
-      component: Hello
+      component: Login
+    },
+    {
+    path: '/',
+    redirect: '/login',
+    component: Login,
+    meta: {
+          title: 'Trafik',
+          // propertyCheck: true,
+          noReqToken: true
+        }
+    },
+    {
+      path: '/signup',
+      name: 'Signup',
+      component: Signup
+    },
+    {
+      path: '/traffic-status',
+      name: 'TrafficStatus',
+      component: TrafficStatus,
+      meta: {
+          title: 'Trafik',
+          // propertyCheck: true,
+          reqToken: true
+        }
+    },
+    {
+      path: '/traffic-report',
+      name: 'TrafficReport',
+      component: TrafficReport,
+      meta: {
+          title: 'Trafik',
+          // propertyCheck: true,
+          reqToken: true
+        }
+    },
+    {
+      path: '/select-status',
+      name: 'SelectStatus',
+      component: SelectStatus,
+      meta: {
+          title: 'Trafik',
+          // propertyCheck: true,
+          reqToken: true
+        }
     }
   ]
-})
