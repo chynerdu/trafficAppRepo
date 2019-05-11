@@ -84,6 +84,7 @@ export default {
           if (this.password != this.confirm_password) {
               console.log('password mismatch')
           } else {
+            this.$Progress.start()
             this.$http
                 .post(`${this.API}/signup`, {
                     first_name: this.first_name,
@@ -93,13 +94,18 @@ export default {
                 })
                 .then(
                     response => {
+                        this.$Progress.finish()
                         localStorage.setItem('user_token ', response.body.token)
                         console.log('successful ', response)
-                        this.$router.push('/login')
-                        location.reload()
-                    
+                        this.$toast.success('Signup successfull', 'Failed', this.notificationSystem.options.success)
+                        setTimeout(() => {
+                          this.$router.push('/login')
+                          location.reload()
+                        }, 2500)
                     })
                     .catch(err => {
+                        this.$Progress.fail()
+                        this.$toast.error('Signup failed', 'Failed', this.notificationSystem.options.error)
                         console.log('signup ', err)
                     })
           }

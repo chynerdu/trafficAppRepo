@@ -158,8 +158,42 @@ exports.findAll = (req, res) => {
 
 // Find a single note with a noteId
 exports.findOne = (req, res) => {
-    traffic.findById(req.params.id, function(err, Singleproduct){
-        res.json(Singleproduct);
+    const fDate = moment().format("YYYY-MM-DD HH:mm:ss")
+    const date = moment().format("YYYY-MM-DD")
+    const moment_hour = moment().hour();
+    traffic.findOne({"traffic.date" : date}, function(err, queryTraffic){
+        // let sameHour = queryTraffic.traffic
+        // console.log('query ', sameHour)
+        if (err) {
+            console.log('failed to fetch ', err)
+            res.status(400).send(err)
+        } else {
+            if (queryTraffic == null) {
+                res.status(400).send('No traffic report have been made, try again later')
+            } else {
+                let sameDate = queryTraffic.traffic
+                var filterTraffic = new Promise(function(resolve, reject ) {
+                    var getHour = sameDate.hourly.filter(sameHour => {
+                    return sameHour.hour_posted === moment_hour
+                    })
+                    if (getHour != null) {
+                        resolve(getHour)
+                    } else {
+                        reject(Error)
+                    }
+                })
+                filterTraffic.then(result => {
+                var getLocation = result.filter(isMatch => {
+                    return isMatch.time_lapse.starting_point === req.query.starting_point && isMatch.time_lapse.ending_point === req.query.ending_point
+                })
+                    res.json(getLocation);
+                },
+                error => {
+                    res.status(501).send('Unable to fetch report')
+                })
+            }
+        }
+        
     });
 };
 

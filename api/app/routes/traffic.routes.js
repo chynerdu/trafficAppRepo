@@ -30,10 +30,10 @@ module.exports = (app) => {
     //     console.log('posted ', req.body)
     // });
     // Retrieve all Notes
-    app.get('/notes', traffic.findAll);
+    app.get('/alltraffic', traffic.findAll);
 
     // Retrieve a single Note with noteId
-    app.get('/notes/:noteId', traffic.findOne);
+    app.get('/traffic-report', traffic.findOne);
 
     // Update a Note with noteId
     app.put('/notes/:noteId', traffic.update);

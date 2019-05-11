@@ -4,6 +4,7 @@ import Signup from '@/components/register/signup'
 import TrafficStatus from '@/components/traffic/traffic-status'
 import TrafficReport from '@/components/traffic/traffic-report'
 import SelectStatus from '@/components/traffic/select-status'
+import TrafficResult from '@/components/traffic/traffic-result'
 
 
  export const routes = [
@@ -51,6 +52,16 @@ import SelectStatus from '@/components/traffic/select-status'
       path: '/select-status',
       name: 'SelectStatus',
       component: SelectStatus,
+      meta: {
+          title: 'Trafik',
+          // propertyCheck: true,
+          reqToken: true
+        }
+    },
+    {
+      path: '/traffic-result',
+      name: 'TrafficResult',
+      component: TrafficResult,
       meta: {
           title: 'Trafik',
           // propertyCheck: true,

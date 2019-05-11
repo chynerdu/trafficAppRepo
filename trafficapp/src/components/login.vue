@@ -9,20 +9,20 @@
             <div data-height="cover" class="caption bottom-0">
                 <div class="caption-center">
 
-                    <div class="left-50 right-50 top-50">
+                    <div class="left-20 right-20 top-20">
                         <form  >
-                        <h3 class="color-white center-text uppercase bold fa-2x">LOGIN</h3>
+                        <h3 class="color-white center-text uppercase bold">LOGIN</h3>
                         <p class="color-highlight center-text font-12 under-heading bottom-30 top-5">
                             Let's get you in your account
                         </p>
                         <div class="input-style input-light has-icon input-style-1 input-required">
-                            <i class="input-icon fa fa-user font-11"></i>
+                            <i class="input-icon fa fa-user font-11 left-10"></i>
                             <span>Username</span>
                             <em>(required)</em>
                             <input type="name" v-model= "email" placeholder="Username">
                         </div> 
-                        <div class="input-style input-light has-icon input-style-1 input-required bottom-30">
-                            <i class="input-icon fa fa-lock font-11"></i>
+                        <div class="input-style input-light has-icon input-style-1 input-required bottom-30 border-radius">
+                            <i class="input-icon fa fa-lock font-11 left-10"></i>
                             <span>Password</span>
                             <em>(required)</em>
                             <input type="password" v-model= "password" placeholder="Password">
@@ -85,6 +85,7 @@ export default {
   },
   methods: {
       login() {
+          this.$Progress.start()
           this.API = this.$store.state.api
           this.$http
             .post(`${this.API}/login`, {
@@ -104,6 +105,7 @@ export default {
                   this.$toast.success('Successfully logged in!', 'OK', this.notificationSystem.options.success)
                   this.$router.push('/traffic-report')
                   location.reload()
+                  this.$Progress.finish()
                 //   var promise = new Promise(function(resolve, reject) {
                 //    console.log('token here ', localStorage.getItem('user_token'))
                 //    if (localStorage.getItem('user_token') != null) {
@@ -130,22 +132,11 @@ export default {
                 })
                 .catch(err => {
                   console.log('login error ', err)
+                  this.$Progress.fail()
                   this.$toast.error(err.body, 'Failed', this.notificationSystem.options.error)
                 })
             
       },
-      getTraffic() {
-          this.$http
-            .get('http://127.0.0.1:8084/notes')
-            .then(
-                response => {
-                  console.log('all traffic', response)
-                })
-                .catch(err => {
-                  console.log('fetch failed ', err)
-                })
-            
-      }
   }
 }
 </script>

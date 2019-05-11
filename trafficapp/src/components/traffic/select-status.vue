@@ -11,41 +11,37 @@
                     </p>
                 </div>
                 
-                <div class="content">
+                <div class="content  bottom-50 pb40">
                     <div class="link-list link-list-3">
-                        <p @click.prevent= 'postReport(1)' class="round-small shadow-tiny">
-                            <i class="fa fa-server font-18 color-blue2-dark"></i>
+                        <p @click.prevent= 'postReport(1)' class="round-small shadow-tiny free">
+                            <i class="fa fa-car font-18 color-green1-dark"></i>
                             <span>The Road Is Free</span>
                             <strong>No traffic the road is free.</strong>
-                            <em class="color-green1-dark">Online</em>
-                            <i class="fa fa-check-circle color-green1-dark"></i>
+                            <i class="color-green1-dark">Report This</i>
                         </p>
                     </div>        
-                    <div class="link-list link-list-3">
+                    <div class="link-list link-list-3 mild">
                         <p @click.prevent= 'postReport(2)' class="round-small shadow-tiny">
-                            <i class="fa fa-mobile font-18 color-red2-dark"></i>
+                            <i class="fa fa-car font-18 color-green2-light"></i>
                             <span>Traffic is mild</span>
                             <strong>No major traffic, just some few stops. </strong>
-                            <em class="color-green1-dark">Online</em>
-                            <i class="fa fa-check-circle color-green1-dark"></i>
+                            <i class="color-green2-light">Report This</i>
                         </p>
                     </div>           
-                    <div class="link-list link-list-3">
+                    <div class="link-list link-list-3 heavy">
                         <p @click.prevent= 'postReport(3)' class="round-small shadow-tiny">
-                            <i class="fa fa-comment font-18 color-green1-dark"></i>
+                           <i class="fa fa-car font-18 color-red2-light"></i>
                             <span>Heavy Traffic</span>
                             <strong>Major traffic along the road</strong>
-                            <em class="color-green1-dark">Online</em>
-                            <i class="fa fa-check-circle color-green1-dark"></i>
+                            <i class="color-red2-light">Report This</i>
                         </p>
                     </div>           
-                    <div class="link-list link-list-3">
+                    <div class="link-list link-list-3 blocked">
                         <p @click.prevent= 'postReport(4)' class="round-small shadow-tiny">
-                            <i class="fa fa-shopping-bag font-18 color-brown1-dark"></i>
+                            <i class="fa fa-car font-18 color-red1-dark"></i>
                             <span>Road Is Blocked</span>
                             <strong>The road is blocked, alternative route advised</strong>
-                            <em class="color-yellow1-dark">INCIDENT</em>
-                            <i class="fa fa-exclamation-triangle color-yellow1-dark"></i>
+                            <i class="color-red1-dark">Report This</i>
                         </p>
                     </div>   
                 </div>
@@ -97,6 +93,7 @@ export default {
     document.getElementById('menu-1').classList.remove('menu-active')
     },
     postReport(status) {
+          this.$Progress.start()
           this.API = this.$store.state.api
           this.$http
             .post(`${this.API}/post-report`, {
@@ -106,6 +103,7 @@ export default {
             })
             .then(
                 response => {
+                  this.$Progress.finish()
                   if(response.status == 208) {
                     this.$toast.info(response.body.message, 'OK', this.notificationSystem.options.info)  
                   } else {
@@ -114,6 +112,7 @@ export default {
                   }
                 })
                 .catch(err => {
+                  this.$Progress.fail()
                   console.log('login error ', err)
                   this.$toast.error('Unable to post!', 'OK', this.notificationSystem.options.error)
                 })

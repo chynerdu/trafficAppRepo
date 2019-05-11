@@ -8,11 +8,26 @@ import App from './App'
 import VueResource from 'vue-resource'
 import VueIziToast from 'vue-izitoast'
 import 'izitoast/dist/css/iziToast.css'
+import * as VueGoogleMaps from "vue2-google-maps"
+ import Multiselect from 'vue-multiselect'
+ import VueProgressBar from 'vue-progressbar'
 // import firebase from 'firebase'
 
 Vue.use(VueRouter)  
 Vue.use(VueResource)
 Vue.use(VueIziToast)
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "REPLACE-THIS-WITH-YOUR-KEY-FROM-ABOVE",
+    libraries: "places" // necessary for places input
+  }
+});
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '10px'
+})
+Vue.component('multiselect', Multiselect)
 
 Vue.config.productionTip = false
 const router = new VueRouter({

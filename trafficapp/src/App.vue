@@ -5,6 +5,7 @@
         <!--<notifications group="foo" class = "my-style"/>-->
         
          <router-view ></router-view>
+         <vue-progress-bar></vue-progress-bar>
         <!--<myfooter></myfooter>-->
            
     </div>
