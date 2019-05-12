@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Trafik",
+  "short_name": "Trafik",
+  "version": "io.cordova.hellocordova",
+  "description": "A Traffic report application",
+  "author": "Chinedu",
+  "icons": [],
+  "start_url": "index.html"
+}
